@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
@@ -18,6 +19,8 @@ mongoose.connection
     .on('error', error => console.log('Error connecting to MongoLab:', error));
 
 const server = express();
+server.use(cors());
+
 server.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
 server.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
