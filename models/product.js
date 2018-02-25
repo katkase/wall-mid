@@ -5,6 +5,10 @@ const Schema = mongoose.Schema;
 const ProductSchema = new Schema({
   name: { type: String },
   sku: { type: String },
+  images: [{
+    type: Schema.Types.ObjectId,
+    ref: 'image'
+  }],
   frames: [{
     type: Schema.Types.ObjectId,
     ref: 'frame'
@@ -14,6 +18,20 @@ const ProductSchema = new Schema({
     ref: 'lens'
   }]
 });
+
+ProductSchema.statics.addImageToProduct = function(productId, imageId) {
+  const Image = mongoose.model('image');
+  return this.findById({ _id: productId })
+    .then(product => {
+      return Image.findById({ _id: imageId })
+        .then(image => {
+          image.product = product;
+          product.images.push(image);
+          return Promise.all([image.save(), product.save()])
+            .then(([image, product]) => product);
+        });
+    });
+}
 
 ProductSchema.statics.addFrameToProduct = function(productId, frameId) {
   const Frame = mongoose.model('frame');
@@ -41,6 +59,12 @@ ProductSchema.statics.addLensToProduct = function(productId, lensId) {
             .then(([lens, product]) => product);
         });
     });
+}
+
+ProductSchema.statics.findImages = function(id) {
+  return this.findById(id)
+    .populate('images')
+    .then(product => product.images);
 }
 
 ProductSchema.statics.findFrames = function(id) {
