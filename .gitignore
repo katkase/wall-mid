@@ -10,3 +10,9 @@
 .DS_Store
 
 npm-debug.log*
+
+#mlab
+/src/config/mlab.js
+
+#logs
+/logs
