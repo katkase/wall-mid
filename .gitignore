@@ -16,3 +16,6 @@ npm-debug.log*
 
 #logs
 /logs
+
+#test
+/test

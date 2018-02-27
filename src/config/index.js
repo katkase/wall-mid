@@ -9,8 +9,8 @@ export default {
     json: false,
     logBaseDir,
     logLevel: 'verbose',
-    maxSize: 10485760
+    maxSize: 10485760,
   },
   MONGO_URI,
-  port: 4000
+  port: 4000,
 };

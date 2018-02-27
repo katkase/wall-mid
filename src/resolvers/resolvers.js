@@ -6,7 +6,7 @@ const Frame = mongoose.model('frame');
 const Lens = mongoose.model('lens');
 
 const resolvers = {
-  Query : {
+  Query: {
     products: () => Product.find({}),
     product: (root, { id }) => Product.findById({ _id: id }),
     images: () => Image.find({}),
@@ -17,32 +17,35 @@ const resolvers = {
     lens: (root, { id }) => Lens.findById({ _id: id }),
   },
   Product: {
-    images: (product) => Product.findImages(product.id),
-    frames: (product) => Product.findFrames(product.id),
-    lenses: (product) => Product.findLenses(product.id)
+    images: product => Product.findImages(product.id),
+    frames: product => Product.findFrames(product.id),
+    lenses: product => Product.findLenses(product.id),
   },
   Image: {
-    product: (image) => Image.findProduct(image.id)
+    product: image => Image.findProduct(image.id),
   },
   Frame: {
-    products: (frame) => Frame.findProducts(frame.id)
+    products: frame => Frame.findProducts(frame.id),
   },
   Lens: {
-    products: (lens) => Lens.findProducts(lens.id)
+    products: lens => Lens.findProducts(lens.id),
   },
   Mutation: {
-    addProduct: (root, { name, sku }) => new Product({ name: name, sku: sku }).save(),
+    addProduct: (root, { name, sku }) => new Product({ name, sku }).save(),
     deleteProduct: (root, { id }) => Product.remove({ _id: id }),
-    addImage: (root, { name, src }) => new Image({ name: name, src: src }).save(),
+    addImage: (root, { name, src }) => new Image({ name, src }).save(),
     deleteImage: (root, { id }) => Image.remove({ _id: id }),
-    addFrame: (root, { name }) => new Frame({ name: name }).save(),
+    addFrame: (root, { name }) => new Frame({ name }).save(),
     deleteFrame: (root, { id }) => Frame.remove({ _id: id }),
-    addLens: (root, { name }) => new Lens({ name: name }).save(),
+    addLens: (root, { name }) => new Lens({ name }).save(),
     deleteLens: (root, { id }) => Lens.remove({ _id: id }),
-    addImageToProduct: (root, { productId, imageId }) => Product.addImageToProduct(productId, imageId),
-    addFrameToProduct: (root, { productId, frameId }) => Product.addFrameToProduct(productId, frameId),
-    addLensToProduct: (root, { productId, lensId }) => Product.addLensToProduct(productId, lensId),
-  }
-}
+    addImageToProduct: (root, { productId, imageId }) =>
+      Product.addImageToProduct(productId, imageId),
+    addFrameToProduct: (root, { productId, frameId }) =>
+      Product.addFrameToProduct(productId, frameId),
+    addLensToProduct: (root, { productId, lensId }) =>
+      Product.addLensToProduct(productId, lensId),
+  },
+};
 
 export default resolvers;

@@ -11,7 +11,7 @@ import { logger } from './logger';
 
 const {
   MONGO_URI,
-  port
+  port,
 } = config;
 
 if (!MONGO_URI) {
@@ -21,35 +21,34 @@ if (!MONGO_URI) {
 mongoose.Promise = global.Promise;
 mongoose.connect(config.MONGO_URI);
 mongoose.connection
-    .once('open', () => console.log('Connected to MongoLab instance.'))
-    .on('error', error => console.log('Error connecting to MongoLab:', error));
+  .once('open', () => logger('Connected to MongoLab instance.', 'info'))
+  .on('error', error => logger(`Error connecting to MongoLab: ${error}`, 'error'));
 
-const server = express();
-server.use(cors());
+const app = express();
+app.use(cors());
 
-// server.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-server.use('/graphql', bodyParser.json(), graphqlExpress(request => {
-  return {
+// app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use('/graphql', bodyParser.json(), graphqlExpress(request => (
+  {
     schema,
-    rootValue  : {
-      request
+    rootValue: {
+      request,
     },
-    formatError: error => {
+    formatError: (error) => {
       const params = {
-        message  : error.message,
+        message: error.message,
         locations: error.locations,
-        stack    : error.stack
+        stack: error.stack,
       };
       logger(`message: '${error.message}', QUERY: '${request.body.query}'`, 'error');
       // Optional ${request.body.operationName} ${request.body.variables}
       return (params);
-    }
+    },
   }
+)));
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql',
 }));
-server.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql'
-}));
-server.listen(port, () => {
-  logger('Express running', 'info');
-  console.log('Listening on port', config.port);
+app.listen(port, () => {
+  logger(`Express listening on port ${port}`, 'info');
 });

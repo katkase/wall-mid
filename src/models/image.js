@@ -1,21 +1,22 @@
-import mongoose from 'mongoose';
-
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from 'mongoose';
 
 const ImageSchema = new Schema({
   name: { type: String },
   src: { type: String },
   product: {
     type: Schema.Types.ObjectId,
-    ref: 'product'
-  }
+    ref: 'product',
+  },
 });
 
-ImageSchema.statics.findProduct = function(id) {
-  return this.findById(id)
-    .populate('product')
-    .then(image => image.product);
-}
+ImageSchema.statics = {
+  findProduct(id) {
+    return this.findById(id)
+      .populate('product')
+      .then(image => image.product);
+  },
+};
 
 const model = mongoose.model('image', ImageSchema);
+
 export default model;
