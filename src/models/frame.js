@@ -10,8 +10,7 @@ const FrameSchema = new Schema({
 
 FrameSchema.statics = {
   findProducts(id) {
-    const Frame = mongoose.model('frame');
-    return Frame.findById(id)
+    return this.findById(id)
       .populate('products')
       .then(frame => frame.products);
   },
