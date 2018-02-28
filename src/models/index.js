@@ -1,4 +1,4 @@
-export { default as Product } from './product';
-export { default as Image } from './image';
-export { default as Frame } from './frame';
-export { default as Lens } from './lens';
+import './product';
+import './image';
+import './frame';
+import './lens';

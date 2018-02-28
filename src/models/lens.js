@@ -10,7 +10,8 @@ const LensSchema = new Schema({
 
 LensSchema.statics = {
   findProducts(id) {
-    return this.findById(id)
+    const Lens = mongoose.model('lens');
+    return Lens.findById(id)
       .populate('products')
       .then(lens => lens.products);
   },

@@ -2,7 +2,7 @@
 
 ![graphql apollo](http://i.imgur.com/oTDU6as.png)
 
-GraphQL + Apollo Server Express
+GraphQL with Apollo Server Express
 
 ## Versions
 - Express 4.16.2

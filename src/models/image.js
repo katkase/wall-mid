@@ -11,7 +11,8 @@ const ImageSchema = new Schema({
 
 ImageSchema.statics = {
   findProduct(id) {
-    return this.findById(id)
+    const Image = mongoose.model('image');
+    return Image.findById(id)
       .populate('product')
       .then(image => image.product);
   },

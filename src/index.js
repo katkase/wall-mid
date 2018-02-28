@@ -4,7 +4,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-import models from './models';
+import './models';
 import schema from './schema/schema';
 import config from './config';
 import { logger } from './logger';
@@ -27,25 +27,25 @@ mongoose.connection
 const app = express();
 app.use(cors());
 
-// app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-app.use('/graphql', bodyParser.json(), graphqlExpress(request => (
-  {
-    schema,
-    rootValue: {
-      request,
-    },
-    formatError: (error) => {
-      const params = {
-        message: error.message,
-        locations: error.locations,
-        stack: error.stack,
-      };
-      logger(`message: '${error.message}', QUERY: '${request.body.query}'`, 'error');
-      // Optional ${request.body.operationName} ${request.body.variables}
-      return (params);
-    },
-  }
-)));
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+// app.use('/graphql', bodyParser.json(), graphqlExpress(request => (
+//   {
+//     schema,
+//     rootValue: {
+//       request,
+//     },
+//     formatError: (error) => {
+//       const params = {
+//         message: error.message,
+//         locations: error.locations,
+//         stack: error.stack,
+//       };
+//       logger(`message: '${error.message}', QUERY: '${request.body.query}'`, 'error');
+//       // Optional ${request.body.operationName} ${request.body.variables}
+//       return (params);
+//     },
+//   }
+// )));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));

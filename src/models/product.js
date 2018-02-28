@@ -19,41 +19,41 @@ const ProductSchema = new Schema({
 
 ProductSchema.statics = {
   addImageToProduct(productId, imageId) {
-    const Image = mongoose.model('image');
     return this.findById({ _id: productId })
       .then((product) => {
+        const Image = mongoose.model('image');
         return Image.findById({ _id: imageId })
           .then((image) => {
-            image.product = product;
+            image.set({ product });
             product.images.push(image);
             return Promise.all([image.save(), product.save()])
-              .then(([image, product]) => product);
+              .then(() => product);
           });
       });
   },
   addFrameToProduct(productId, frameId) {
-    const Frame = mongoose.model('frame');
     return this.findById({ _id: productId })
       .then((product) => {
+        const Frame = mongoose.model('frame');
         return Frame.findById({ _id: frameId })
           .then((frame) => {
             frame.products.push(product);
             product.frames.push(frame);
             return Promise.all([frame.save(), product.save()])
-              .then(([frame, product]) => product);
+              .then(() => product);
           });
       });
   },
   addLensToProduct(productId, lensId) {
-    const Lens = mongoose.model('lens');
     return this.findById({ _id: productId })
       .then((product) => {
+        const Lens = mongoose.model('lens');
         return Lens.findById({ _id: lensId })
           .then((lens) => {
             lens.products.push(product);
             product.lenses.push(lens);
             return Promise.all([lens.save(), product.save()])
-              .then(([lens, product]) => product);
+              .then(() => product);
           });
       });
   },
