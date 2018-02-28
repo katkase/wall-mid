@@ -19,7 +19,7 @@ if (!MONGO_URI) {
 }
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.MONGO_URI);
+mongoose.connect(MONGO_URI);
 mongoose.connection
   .once('open', () => logger('Connected to MongoLab instance.', 'info'))
   .on('error', error => logger(`Error connecting to MongoLab: ${error}`, 'error'));
@@ -27,25 +27,25 @@ mongoose.connection
 const app = express();
 app.use(cors());
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-// app.use('/graphql', bodyParser.json(), graphqlExpress(request => (
-//   {
-//     schema,
-//     rootValue: {
-//       request,
-//     },
-//     formatError: (error) => {
-//       const params = {
-//         message: error.message,
-//         locations: error.locations,
-//         stack: error.stack,
-//       };
-//       logger(`message: '${error.message}', QUERY: '${request.body.query}'`, 'error');
-//       // Optional ${request.body.operationName} ${request.body.variables}
-//       return (params);
-//     },
-//   }
-// )));
+// app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use('/graphql', bodyParser.json(), graphqlExpress(request => (
+  {
+    schema,
+    rootValue: {
+      request,
+    },
+    formatError: (error) => {
+      const params = {
+        message: error.message,
+        locations: error.locations,
+        stack: error.stack,
+      };
+      logger(`message: '${error.message}', QUERY: '${request.body.query}'`, 'error');
+      // Optional ${request.body.operationName} ${request.body.variables}
+      return (params);
+    },
+  }
+)));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
