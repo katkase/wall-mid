@@ -2,27 +2,14 @@ import cors from 'cors';
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 
-import './models';
 import schema from './schema/schema';
 import config from './config';
 import { logger } from './logger';
 
 const {
-  MONGO_URI,
   port,
 } = config;
-
-if (!MONGO_URI) {
-  throw new Error('You must provide a MongoLab URI');
-}
-
-mongoose.Promise = global.Promise;
-mongoose.connect(MONGO_URI);
-mongoose.connection
-  .once('open', () => logger('Connected to MongoLab instance.', 'info'))
-  .on('error', error => logger(`Error connecting to MongoLab: ${error}`, 'error'));
 
 const app = express();
 app.use(cors());

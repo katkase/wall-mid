@@ -12,7 +12,7 @@
 npm-debug.log*
 
 #mlab
-/src/config/mlab.js
+/src/config/magento.js
 
 #logs
 /logs

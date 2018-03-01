@@ -2,52 +2,24 @@ import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from '../resolvers/resolvers';
 
 const typeDefs = `
-  type Frame {
-    id: ID!
-    name: String!
-    products: [Product]
+  union Custom = Value | Values
+  type Value {
+    attribute_code: String
+    value: String
   }
-  type Lens {
-    id: ID!
-    name: String!
-    products: [Product]
-  }
-  type Image {
-    id: ID!
-    name: String!
-    src: String!
-    product: Product
+  type Values {
+    attribute_code: String
+    value: [String]
   }
   type Product {
     id: ID!
     name: String!
     sku: String!
-    images: [Image]
-    frames: [Frame]
-    lenses: [Lens]
+    price: Float!
+    custom_attributes: [Custom]
   }
   type Query {
-    products: [Product]
-    product(id: ID!): Product
-    images: [Image]
-    image(id: ID!): Image
-    frames: [Frame]
-    frame(id: ID!): Frame
-    lenses: [Lens]
-    lens(id: ID!): Lens
-  }
-  type Mutation {
-    addProduct(name: String!, sku: String!): Product
-    deleteProduct(id: ID!): Product
-    addImage(name: String!, src: String!): Image
-    deleteImage(id: ID!): Image
-    addFrame(name: String!): Frame
-    deleteFrame(id: ID!): Frame
-    addLens(name: String!): Lens
-    deleteLens(id: ID!): Lens
-    addImageToProduct(productId: ID!, imageId: ID!): Product
-    addFrameToProduct(productId: ID!, frameId: ID!): Product
-    addLensToProduct(productId: ID!, lensId: ID!): Product
+    products: [Product]!
   }
 `;
 
