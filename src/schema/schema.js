@@ -15,11 +15,11 @@ const typeDefs = `
     id: ID!
     name: String!
     sku: String!
-    price: Float!
+    price: Float
     custom_attributes: [Custom]
   }
   type Query {
-    products: [Product]!
+    products(id: ID!): [Product]!
   }
 `;
 

@@ -1,10 +1,18 @@
 import axios from 'axios';
 
-import { MAGENTO_URI } from '../config/magento';
+import magentoConfig from '../config/magento';
+
+const {
+  url,
+  store,
+  accessToken,
+} = magentoConfig;
+
+axios.defaults.headers.common['Authorization'] = `bearer ${accessToken}`;
 
 const resolvers = {
   Query: {
-    products: () => axios.get(`${MAGENTO_URI}products/?searchCriteria[filter_groups][0][filters][0][field]=category_gear&searchCriteria[filter_groups][0][filters][0][value]=86&searchCriteria[filter_groups][0][filters][0][condition_type]=finset`)
+    products: (root, {id}) => axios.get(`${url}/rest/${store}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${id}`)
       .then(resp => resp.data.items),
   },
   Custom: {
